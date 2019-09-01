@@ -1,0 +1,58 @@
+/* This file is for your main application css. */
+
+@import "../../deps/phoenix_live_view/assets/css/live_view.css";
+
+h1, h5 {
+  margin-bottom: 0;
+}
+
+h5 {
+  margin-top: 0;
+}
+
+.settings-container {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.settings-container  button {
+  background: #73aeea;
+  border-radius: 0.2rem;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+}
+
+.settings-container button:hover {
+  background: #7dbeff;
+}
+
+.board-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board .row {
+  display: flex;
+}
+
+.board .row .cell {
+  margin: 0.2rem;
+}
+
+.slider-container {
+  display: flex;
+}
+
+.slider-container input[type="range"] {
+  margin-left: 1rem;
+}
+
+.slider-container label {
+  margin-left: 1rem;
+}
