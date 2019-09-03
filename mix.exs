@@ -34,6 +34,7 @@ defmodule GameOfLife.MixProject do
   defp deps do
     [
       {:credo, "~> 1.1.4"},
+      {:distillery, "~> 2.1.1"},
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.0"},
       {:phoenix, "~> 1.4.9"},
