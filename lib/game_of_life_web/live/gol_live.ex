@@ -57,7 +57,7 @@ defmodule GameOfLifeWeb.GOLLive do
 
   def handle_info(:tick, socket) do
     %{assigns: %{speed: speed, board: board}} = socket
-    board = Board.next_state(board)
+    board = Board.next_state(board, :async_one_per_cell)
 
     Process.send_after(self(), :tick, speed)
 

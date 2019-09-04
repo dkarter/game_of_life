@@ -64,6 +64,37 @@ defmodule GameOfLife.Board do
     end)
   end
 
+  def next_state(board, :async) do
+    cells =
+      board
+      |> coordinates()
+      |> Enum.chunk_every(board.width)
+      |> Enum.map(fn chunk ->
+        Task.async(fn ->
+          chunk
+          |> Enum.map(&cell_next_state(board, &1))
+        end)
+      end)
+      |> Enum.map(&Task.await/1)
+      |> Enum.concat()
+
+    board |> Map.put(:cells, cells)
+  end
+
+  def next_state(board, :async_one_per_cell) do
+    cells =
+      board
+      |> coordinates()
+      |> Enum.map(fn coordinate ->
+        Task.async(fn ->
+          cell_next_state(board, coordinate)
+        end)
+      end)
+      |> Enum.map(&Task.await/1)
+
+    board |> Map.put(:cells, cells)
+  end
+
   def update_cell(board, {x, y}, alive) do
     %{cells: cells} = board
     index = to_flat_index(board, {x, y})

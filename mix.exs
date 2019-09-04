@@ -33,6 +33,7 @@ defmodule GameOfLife.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:benchfella, "~> 0.3.0"},
       {:credo, "~> 1.1.4"},
       {:distillery, "~> 2.1.1"},
       {:gettext, "~> 0.11"},
