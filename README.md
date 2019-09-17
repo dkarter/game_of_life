@@ -1,5 +1,9 @@
 # Game Of LiveView
 
+![CI STATUS](https://github.com/dkarter/game_of_life/workflows/Elixir%20CI/badge.svg)
+
+[Checkout the production version here](https://gol.doriankarter.com)
+
 ![demo](https://i.imgur.com/bCfZqh8.gif)
 
 ## Running
