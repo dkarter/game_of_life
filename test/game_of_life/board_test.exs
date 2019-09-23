@@ -20,12 +20,13 @@ defmodule GameOfLife.BoardTest do
 
   describe ".random_board" do
     test "creates a new board with default size" do
-      assert %Board{width: 10, height: 10, cells: cells} = Board.random_board()
+      assert board = %Board{width: 10, height: 10, cells: cells} = Board.random_board()
       assert length(cells) == 100
+      refute board == Board.random_board()
     end
   end
 
-  describe ".cell_at" do
+  describe ".find_cell" do
     setup do
       board =
         [
@@ -39,21 +40,21 @@ defmodule GameOfLife.BoardTest do
     end
 
     test "returns the cell at the specified coordinates", %{board: board} do
-      assert Board.cell_at(board, {0, 0}) == 0
-      assert Board.cell_at(board, {1, 0}) == 1
-      assert Board.cell_at(board, {2, 0}) == 2
-      assert Board.cell_at(board, {0, 1}) == 3
-      assert Board.cell_at(board, {1, 1}) == 4
-      assert Board.cell_at(board, {2, 1}) == 5
-      assert Board.cell_at(board, {0, 2}) == 6
-      assert Board.cell_at(board, {1, 2}) == 7
-      assert Board.cell_at(board, {2, 2}) == 8
+      assert Board.find_cell(board, {0, 0}) == 0
+      assert Board.find_cell(board, {1, 0}) == 1
+      assert Board.find_cell(board, {2, 0}) == 2
+      assert Board.find_cell(board, {0, 1}) == 3
+      assert Board.find_cell(board, {1, 1}) == 4
+      assert Board.find_cell(board, {2, 1}) == 5
+      assert Board.find_cell(board, {0, 2}) == 6
+      assert Board.find_cell(board, {1, 2}) == 7
+      assert Board.find_cell(board, {2, 2}) == 8
     end
 
     test "returns nil when outside of range", %{board: board} do
-      assert Board.cell_at(board, {0, 3}) == nil
-      assert Board.cell_at(board, {3, 0}) == nil
-      assert Board.cell_at(board, {-1, 2}) == nil
+      assert Board.find_cell(board, {0, 3}) == nil
+      assert Board.find_cell(board, {3, 0}) == nil
+      assert Board.find_cell(board, {-1, 2}) == nil
     end
   end
 
@@ -99,64 +100,6 @@ defmodule GameOfLife.BoardTest do
     end
   end
 
-  describe ".cell_next_state" do
-    test "live cell with one or no neighbors dies, as if by solitude" do
-      assert Board.compute_next_state(1, 0) == 0
-      assert Board.compute_next_state(1, 1) == 0
-    end
-
-    test "live cell with two or three neighbors survives" do
-      assert Board.compute_next_state(1, 2) == 1
-      assert Board.compute_next_state(1, 3) == 1
-    end
-
-    test "live cell with four or more neighbors dies, as if by overpopulation" do
-      4..8
-      |> Enum.each(fn count ->
-        assert Board.compute_next_state(1, count) == 0
-      end)
-    end
-
-    test "dead cell with exactly three neighbors becomes alive" do
-      assert Board.compute_next_state(0, 3) == 1
-    end
-
-    test "dead cell with less more than three neighbors remains dead" do
-      0..2
-      |> Enum.each(fn count ->
-        assert Board.compute_next_state(0, count) == 0
-      end)
-    end
-
-    test "dead cell with more than three neighbors remains dead" do
-      4..8
-      |> Enum.each(fn count ->
-        assert Board.compute_next_state(0, count) == 0
-      end)
-    end
-
-    test "integration test" do
-      board =
-        [
-          [1, 0, 1, 1, 0, 1],
-          [0, 1, 1, 0, 0, 0],
-          [1, 0, 1, 0, 1, 0],
-          [0, 0, 1, 0, 0, 0],
-          [0, 0, 1, 1, 1, 1],
-          [0, 0, 1, 1, 1, 1]
-        ]
-        |> Board.from_2d_cell_list()
-
-      assert Board.cell_next_state(board, {0, 0}) == 0
-      assert Board.cell_next_state(board, {0, 1}) == 1
-      assert Board.cell_next_state(board, {0, 3}) == 0
-      assert Board.cell_next_state(board, {2, 0}) == 1
-      assert Board.cell_next_state(board, {2, 4}) == 0
-      assert Board.cell_next_state(board, {4, 2}) == 0
-      assert Board.cell_next_state(board, {5, 4}) == 1
-    end
-  end
-
   describe ".update_cell" do
     test "sets the cell's alive/dead status" do
       board =
@@ -169,7 +112,7 @@ defmodule GameOfLife.BoardTest do
 
       {x, y} = {1, 1}
       board = Board.update_cell(board, {x, y}, 1)
-      assert Board.cell_at(board, {x, y}) == 1
+      assert Board.find_cell(board, {x, y}) == 1
     end
   end
 

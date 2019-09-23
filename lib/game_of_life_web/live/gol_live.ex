@@ -32,7 +32,7 @@ defmodule GameOfLifeWeb.GOLLive do
           <%= for y <- 0..(@board.height - 1) do %>
             <div class="row">
               <%= for  x <- 0..(@board.width - 1) do %>
-                <div class="cell"><%= display_cell(Board.cell_at(@board, {x, y})) %></div>
+                <div class="cell"><%= display_cell(Board.find_cell(@board, {x, y})) %></div>
               <% end %>
             </div>
           <% end %>

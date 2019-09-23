@@ -3,13 +3,14 @@ defmodule GameOfLife.Board do
   Manipulates the board data structure
   """
 
+  alias GameOfLife.Cell
+
   defstruct cells: [],
             width: 10,
             height: 10
 
   @type coordinate :: {integer(), integer()}
-  @type cell_state :: 1 | 0
-  @type cell_list :: list(cell_state)
+  @type cell_list :: list(Cell.cell_state())
 
   @type t :: %GameOfLife.Board{
           cells: cell_list,
@@ -32,19 +33,13 @@ defmodule GameOfLife.Board do
     %__MODULE__{width: size, height: size, cells: cells}
   end
 
-  @spec cell_at(t, coordinate) :: cell_state | nil
-  def cell_at(%{width: w, height: h}, {x, y}) when x >= w or y >= h, do: nil
-  def cell_at(_board, {x, y}) when x < 0 or y < 0, do: nil
+  @spec find_cell(t, coordinate) :: Cell.cell_state() | nil
+  def find_cell(%{width: w, height: h}, {x, y}) when x >= w or y >= h, do: nil
+  def find_cell(_board, {x, y}) when x < 0 or y < 0, do: nil
 
-  def cell_at(board, {x, y}) do
+  def find_cell(board, {x, y}) do
     index = to_flat_index(board, {x, y})
     board.cells |> Enum.at(index)
-  end
-
-  @spec cells_at(t, list(coordinate)) :: list(cell_state | nil)
-  def cells_at(board, coordinates) do
-    coordinates
-    |> Enum.map(fn {x, y} -> cell_at(board, {x, y}) end)
   end
 
   @spec live_neighbor_count(t, coordinate) :: integer()
@@ -72,7 +67,7 @@ defmodule GameOfLife.Board do
     Map.put(board, :cells, cells)
   end
 
-  @spec update_cell(t, coordinate, cell_state) :: t
+  @spec update_cell(t, coordinate, Cell.cell_state()) :: t
   def update_cell(board, {x, y}, alive) do
     %{cells: cells} = board
     index = to_flat_index(board, {x, y})
@@ -81,26 +76,22 @@ defmodule GameOfLife.Board do
     Map.put(board, :cells, cells)
   end
 
-  @spec cell_next_state(t, coordinate) :: cell_state
-  def cell_next_state(board, {x, y}) do
-    board
-    |> cell_at({x, y})
-    |> compute_next_state(live_neighbor_count(board, {x, y}))
-  end
-
   @spec coordinates(t) :: list(coordinate)
   def coordinates(board) do
     %{height: height, width: width} = board
     for y <- 0..(height - 1), x <- 0..(width - 1), do: {x, y}
   end
 
-  @spec compute_next_state(cell_state, integer()) :: cell_state
-  def compute_next_state(1, neighbor_count) when neighbor_count < 2, do: 0
-  def compute_next_state(1, neighbor_count) when neighbor_count in [2, 3], do: 1
-  def compute_next_state(1, neighbor_count) when neighbor_count >= 4, do: 0
-  def compute_next_state(0, neighbor_count) when neighbor_count < 3, do: 0
-  def compute_next_state(0, neighbor_count) when neighbor_count == 3, do: 1
-  def compute_next_state(0, neighbor_count) when neighbor_count > 3, do: 0
+  defp cell_next_state(board, {x, y}) do
+    board
+    |> find_cell({x, y})
+    |> Cell.next_state(live_neighbor_count(board, {x, y}))
+  end
+
+  defp cells_at(board, coordinates) do
+    coordinates
+    |> Enum.map(fn {x, y} -> find_cell(board, {x, y}) end)
+  end
 
   defp neighbor_coordinates({x, y}) do
     [
