@@ -42,7 +42,8 @@ defmodule GameOfLife.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:phoenix_pubsub, "~> 1.1"},
       {:plug_cowboy, "~> 2.0"},
-      {:phoenix_live_view, "~> 0.1.1"}
+      {:phoenix_live_view, "~> 0.1.1"},
+      {:dialyxir, "~> 1.0.0-rc.6", only: [:dev], runtime: false}
     ]
   end
 
