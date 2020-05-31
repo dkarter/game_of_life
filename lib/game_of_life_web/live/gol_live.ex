@@ -15,14 +15,14 @@ defmodule GameOfLifeWeb.GOLLive do
       <div class="settings-container">
         <form name="settings" phx-change="update_settings">
           <div class="slider-container">
-            <div>Size</div>
+            <div>Board Size</div>
             <input type="range" min="10" max="40" value=<%= @board.width %> class="slider" name="board_size" />
-            <label><%= @board.width %></label>
+            <label><%= @board.width %>x<%= @board.width %></label>
           </div>
           <div class="slider-container">
-            <div>Speed</div>
+            <div>Lifecycle Speed</div>
             <input type="range" min="1" max="1000" value=<%= @speed %> class="slider" name="speed" />
-            <label><%= @speed %></label>
+            <label><%= @speed %>ms</label>
           </div>
           <button phx-click="reset">Reset</button>
         </form>
