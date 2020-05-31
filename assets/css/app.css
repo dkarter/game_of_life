@@ -1,9 +1,15 @@
 /* This file is for your main application css. */
 
-@import "../../deps/phoenix_live_view/assets/css/live_view.css";
+@import '../../deps/phoenix_live_view/assets/css/live_view.css';
+@import './github_corner.css';
 
-h1, h5 {
-  margin-bottom: 0;
+* {
+  font-family: 'Helvetica';
+}
+
+h5 {
+  font-style: italic;
+  padding-top: 1rem;
 }
 
 h5 {
@@ -17,7 +23,7 @@ h5 {
   padding: 1rem;
 }
 
-.settings-container  button {
+.settings-container button {
   background: #73aeea;
   border-radius: 0.2rem;
   border: none;
@@ -47,9 +53,10 @@ h5 {
 
 .slider-container {
   display: flex;
+  margin-bottom: 1rem;
 }
 
-.slider-container input[type="range"] {
+.slider-container input[type='range'] {
   margin-left: 1rem;
 }
 
